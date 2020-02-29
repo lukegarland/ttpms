@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/camsh/OD/School/ENEL 400/ttpms/jSerialComm-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/jSerialComm-2.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
