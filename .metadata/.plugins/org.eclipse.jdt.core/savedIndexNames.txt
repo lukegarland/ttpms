@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+C:\Users\camsh\OD\School\ENEL 400\ttpms\.metadata\.plugins\org.eclipse.jdt.core
-2906248488.index
-1248545562.index
