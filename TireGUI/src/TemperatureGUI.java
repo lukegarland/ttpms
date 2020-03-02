@@ -1,17 +1,8 @@
 import java.util.Scanner;
-import javax.swing.JFrame;
-import javax.swing.JSlider;
 import com.fazecast.jSerialComm.*;
 
 public class TemperatureGUI {
 	public static void main(String[] args) {
-        // create a window with a slider
-        //JFrame window = new JFrame();
-        //JSlider slider = new JSlider();
-        //slider.setMaximum(1023);
-        //window.add(slider);
-        //window.pack();
-        //window.setVisible(true);
        
         // determine which serial port to use
         SerialPort ports[] = SerialPort.getCommPorts();
