@@ -27,15 +27,17 @@ void loop()
 {
   static unsigned long timeStart;
   static char text[MAX_DATA_MSG_LENGTH];
-  static int temperature;
+  static int ambientV, IR1V, IR2V, IR3V;
 
   timeStart = millis();
   
   
-  temperature = calculateTemperature();
-  
+  ambientV = getVoltage(AMBIENT_PIN);
+  IR1V = getVoltage(IR1_PIN);
+  IR2V = getVoltage(IR2_PIN);
+  IR3V = getVoltage(IR3_PIN);
 
-  sprintf(text, "Temperature: %d", temperature);
+  sprintf(text, "%d %d %d %d %d", deviceAddress, ambientV, IR1V, IR2V, IR3V);
   
   //Send message to receiver
   radio.write(&text, sizeof(text));
@@ -45,10 +47,10 @@ void loop()
 }
 
 
-double calculateTemperature()
+int getVoltage(int pin)
 {
   
   
-  return 0.0;
+  return 0;
   
 }

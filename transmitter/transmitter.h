@@ -7,4 +7,9 @@
 #define ADDRESS_1 "10000"
 #define PERIOD 50
 
+#define AMBIENT_PIN 0
+#define IR1_PIN 0
+#define IR2_PIN 0
+#define IR3_PIN 0
+
 #endif
