@@ -25,12 +25,17 @@ void setup()
 
 void loop()
 {
+  static unsigned long timeStart;
+  timeStart = millis();
   static int i = 0;
   
   char text[MAX_DATA_MSG_LENGTH];
 
   //Send message to receiver
   sprintf(text, "Hello World %d", i++);
+
   radio.write(&text, sizeof(text));
-  delay(100);
+  while(millis() < PERIOD + timeStart) ;//wait if not ready to send message
+   
+
 }
