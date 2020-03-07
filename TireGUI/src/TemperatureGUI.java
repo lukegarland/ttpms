@@ -5,11 +5,21 @@ import com.fazecast.jSerialComm.*;
 public class TemperatureGUI {
 	
 	
-
+	/**
+	 * Main method of the GUI. Main opens the selected serial
+	 * port and then loops through and acquires the serial input.
+	 * Using the serial input, the data is then sent to the GUI 
+	 * to update the temperature and pressure readings
+	 * @param args default, not used
+	 */
 	public static void main(String[] args) 
 	{
               
         SerialPort port = getPortFromSystemIn();
+        if (port == null) {
+        	System.out.println("Invalid port. Please restart the program.");
+        	return;
+        }
         // enter into an infinite loop that reads from the port and updates the GUI
         Scanner data = new Scanner(port.getInputStream());
         DrawUI gui = new DrawUI();
@@ -37,7 +47,10 @@ public class TemperatureGUI {
         
         data.close();
 	}
-	
+	/**
+	 * Asks the user to select a port from the list of available ports
+	 * @return SerialPort selected by the user
+	 */
 	private static SerialPort getPortFromSystemIn()
 	{
 
@@ -82,7 +95,9 @@ public class TemperatureGUI {
 	     return port;
 	        
 	}
-	
+	/**
+	 * Prints a list of the available ports that can be read serially
+	 */
 	private static void printPorts()
 	{
 		 SerialPort ports[] = SerialPort.getCommPorts();
@@ -95,7 +110,7 @@ public class TemperatureGUI {
 	     
 	}
 	/**
-	 * 
+	 * Takes the ADC and scales it to a value between 0 and 1
 	 * @param voltageADC ADC from the analog pins
 	 * @return value between 0 and 1
 	 */

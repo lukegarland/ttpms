@@ -19,9 +19,20 @@ public class Tire extends JComponent {
 	 * and each range is given a color range.
 	 */
 	private GradientPaint gradient1, gradient2;
+	/**
+	 * Class value for width of the drawing
+	 */
 	public static double width = 250;
+	/**
+	 * Class value for height of the drawing
+	 */
 	public static double height = 300;
-	
+	/**
+	 * The paint method for the tire. The method calculates 
+	 * the position it needs to draw the rectangle as well 
+	 * as filling the two halves of the Tire with a color 
+	 * gradient.
+	 */
 	@Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

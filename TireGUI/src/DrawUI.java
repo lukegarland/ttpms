@@ -1,15 +1,18 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GradientPaint;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class DrawUI {
 	private Tire frontLeft;
-	JFrame frame;
-	JPanel panel;
+	private JFrame frame;
+	private JPanel panel;
+	/**
+	 * Initializes the frame, tires and panel. The GUI is then
+	 * displayed.
+	 */
 	public void initializeUI() {
 		frame = new JFrame("Temperature GUI");
 		panel = new JPanel();
@@ -23,11 +26,18 @@ public class DrawUI {
         frame.setSize(500, 500);
         frame.setVisible(true);
 	}
-	public void updateTire(Tire t, double outerTempScale, double centerTempScale, double innerTempScale) {
+	/**
+	 * Updates the tire gradients based upon the new temperature values.
+	 * @param t Tire to be updated
+	 * @param leftTempScale 
+	 * @param centerTempScale
+	 * @param rightTempScale
+	 */
+	public void updateTire(Tire t, double leftTempScale, double centerTempScale, double rightTempScale) {
 		Color colourOne, colourTwo, colourThree;
-		colourOne = calculateColor(outerTempScale);
+		colourOne = calculateColor(leftTempScale);
 		colourTwo = calculateColor(centerTempScale);
-		colourThree = calculateColor(innerTempScale);
+		colourThree = calculateColor(rightTempScale);
 		
 		GradientPaint fill = new GradientPaint(0,0,colourOne,175, 0,colourTwo);
 		t.setGradient1(fill);
@@ -41,6 +51,13 @@ public class DrawUI {
 		frame.validate();
 		frame.repaint();
 	}
+	/**
+	 * Returns a color from blue <----> green <----> red.
+	 * The method takes the scale value and assigns a color 
+	 * value based upon the above range.
+	 * @param scale value between 0 and 1
+	 * @return Color scaled to scale
+	 */
 	private Color calculateColor(double scale) {
 		/* Define the MAXIMUM saturation of RED and GREEN shades
 		 * Range (0-255)
