@@ -5,18 +5,19 @@ import com.fazecast.jSerialComm.*;
 public class TemperatureGUI {
 	
 	
-	
+
 	public static void main(String[] args) 
 	{
               
         SerialPort port = getPortFromSystemIn();
         // enter into an infinite loop that reads from the port and updates the GUI
         Scanner data = new Scanner(port.getInputStream());
-        
-        
+        DrawUI gui = new DrawUI();
+        gui.initializeUI();
         while(data.hasNextLine()) 
         {
                 System.out.println(data.nextLine());
+                gui.updateTire(gui.getFrontLeft(), 0, 0, 0);
         }
         
         data.close();
