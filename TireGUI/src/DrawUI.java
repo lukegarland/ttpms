@@ -15,7 +15,7 @@ public class DrawUI {
 		panel = new JPanel();
 		frontLeft = new Tire();
 		GradientPaint fill = new GradientPaint(0,0,Color.BLACK,100, 0,Color.BLACK);
-		frontLeft.setGradient(fill);
+		frontLeft.setGradient1(fill);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(panel);
         frame.getContentPane().add(frontLeft, BorderLayout.CENTER);
@@ -25,10 +25,10 @@ public class DrawUI {
 	}
 	public void updateTire(Tire t, double outerTempScale, double centerTempScale, double innerTempScale) {
 		GradientPaint fill = new GradientPaint(0,0,Color.BLUE,175, 0,Color.YELLOW);
-		t.setGradient(fill);
+		t.setGradient1(fill);
 		frame.getContentPane().add(t, BorderLayout.CENTER);
 		fill = new GradientPaint(175,0,Color.YELLOW,350, 0,Color.RED);
-		t.setGradient(fill);
+		t.setGradient2(fill);
 		frame.getContentPane().add(t, BorderLayout.CENTER);
 	}
 	public Tire getFrontLeft() {
