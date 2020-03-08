@@ -42,6 +42,8 @@ public class TemperatureGUI {
             		}
             	}
             	gui.updateTire(gui.getFrontLeft(), scaleValues[3], scaleValues[4], scaleValues[5]);
+            	gui.updateText(scaleValues[1], scaleValues[3], scaleValues[4], scaleValues[5]);
+            	gui.updateFrame();
             }
         }
         

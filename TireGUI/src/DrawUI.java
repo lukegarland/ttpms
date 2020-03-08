@@ -1,7 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -9,6 +11,7 @@ public class DrawUI {
 	private Tire frontLeft;
 	private JFrame frame;
 	private JPanel panel;
+	private JLabel bottomText;
 	/**
 	 * Initializes the frame, tires and panel. The GUI is then
 	 * displayed.
@@ -16,11 +19,15 @@ public class DrawUI {
 	public void initializeUI() {
 		frame = new JFrame("Temperature GUI");
 		panel = new JPanel();
+		bottomText = new JLabel("Pressure: 1 PSI, L. Temp: 0 C, C. Temp: 0 C, R. Temp: 0 C");
+		bottomText.setFont(new Font("Arial", Font.PLAIN, 14));
+		
 		frontLeft = new Tire();
 		GradientPaint fill = new GradientPaint(0,0,Color.BLACK,100, 0,Color.BLACK);
 		frontLeft.setGradient1(fill);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(panel);
+        frame.getContentPane().add(bottomText , BorderLayout.SOUTH);
         frame.getContentPane().add(frontLeft, BorderLayout.CENTER);
         frame.pack();
         frame.setSize(500, 500);
@@ -45,8 +52,13 @@ public class DrawUI {
 		fill = new GradientPaint(175,0,colourTwo,350, 0,colourThree);
 		t.setGradient2(fill);
 		
-		panel.revalidate();
-		panel.repaint();
+		
+	}
+	public void updateText(double pressure, double leftTemp, double centerTemp, double rightTemp) { 
+		String text = String.format("Pressure: %.2f PSI, L. Temp: %.2f C, C. Temp: %.2f C, R. Temp: %.2f C", pressure, leftTemp, centerTemp, rightTemp);
+		bottomText.setText("<html><div style='text-align: center;'>" + text + "</div></html>");
+	}
+	public void updateFrame() {
 		frame.invalidate();
 		frame.validate();
 		frame.repaint();
