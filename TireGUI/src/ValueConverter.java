@@ -3,10 +3,9 @@
  * @author lukeg
  * @since March 3, 2020
  */
-public class ValueConverter {
+public class ValueConverter implements Constants{
 
-	final static double SYSTEM_VOLTAGE = 4.6;
-	final static int ADC_RESOLUTION = 1023;
+
 	
 	/**
 	 * For Infineon KP235 Analog Absolute Pressure Sensor
@@ -18,11 +17,10 @@ public class ValueConverter {
 	{
 		final double a = 0.01067;
 		final double b = -0.32667;
-		final double kPaToPSIConversion = 6.89475729;
 		
 		double voltage = ADCToVoltage(ADCValue);
 		
-		return ((voltage / SYSTEM_VOLTAGE - b) / a) / kPaToPSIConversion;
+		return ((voltage / SYSTEM_VOLTAGE - b) / a) / KPA_TO_PSI;
 	}
 	
 	
