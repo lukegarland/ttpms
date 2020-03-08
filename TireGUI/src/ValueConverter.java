@@ -5,7 +5,7 @@
  */
 public class ValueConverter {
 
-	final static double SYSTEM_VOLTAGE = 5.0;
+	final static double SYSTEM_VOLTAGE = 4.6;
 	final static int ADC_RESOLUTION = 1023;
 	
 	/**

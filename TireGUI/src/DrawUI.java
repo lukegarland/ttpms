@@ -54,11 +54,16 @@ public class DrawUI {
 		
 		
 	}
-	public void updateText(double pressure, double leftTemp, double centerTemp, double rightTemp) { 
-		String text = String.format("Pressure: %.2f PSI, L. Temp: %.4f C, C. Temp: %.2f C, R. Temp: %.2f C", pressure, leftTemp, centerTemp, rightTemp);
+	
+	
+	public void updateText(double pressure, double leftTemp, double centerTemp, double rightTemp)
+	{ 
+		String text = String.format("Pressure: %.2f PSI, L. Temp: %.4f Volts, C. Temp: %.2f Volts, R. Temp: %.2f Volts", pressure, leftTemp, centerTemp, rightTemp);
 		bottomText.setText("<html><div style='text-align: center;'>" + text + "</div></html>");
 	}
-	public void updateFrame() {
+	
+	public void updateFrame() 
+	{
 		frame.invalidate();
 		frame.validate();
 		frame.repaint();

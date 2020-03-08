@@ -1,5 +1,8 @@
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.stream.IntStream;
+
 import com.fazecast.jSerialComm.*;
 
 public class TemperatureGUI {
@@ -14,7 +17,8 @@ public class TemperatureGUI {
 	 */
 	public static void main(String[] args) 
 	{
-              
+        final int NUMBER_OF_AVERAGES = 50;
+        
         SerialPort port = getPortFromSystemIn();
         if (port == null) {
         	System.out.println("Invalid port. Please restart the program.");
@@ -26,23 +30,58 @@ public class TemperatureGUI {
         gui.initializeUI();
         String input;
         String [] splitData;
-        int [] scaleValues = new int[6];
+        int [] dataFromADC = new int[6];
+        int [][] lastValues = new int [4][NUMBER_OF_AVERAGES];
+        Arrays.fill(lastValues[0], 0);
+        Arrays.fill(lastValues[1], 0);
+        Arrays.fill(lastValues[2], 0);
+        Arrays.fill(lastValues[3], 0);
+
+
+        int averageIndex = 0;
         while(data.hasNextLine()) 
         {
         	input = data.nextLine();
             System.out.println(input);
             splitData = input.split("\\s+");
-            if(splitData.length == 6) {
-            	for(int i = 0; i<6; i++) {
-            		try {
-            			scaleValues[i] = Integer.parseInt(splitData[i]);
+            
+            
+            
+            if(splitData.length == 6) 
+            {
+            	for(int i = 0; i<6; i++) 
+            	{
+            		try 
+            		{
+            			dataFromADC[i] = Integer.parseInt(splitData[i]);
             		}
             		catch(NumberFormatException nfe) {
             			break;
             		}
             	}
-            	gui.updateTire(gui.getFrontLeft(), scaleValues[3], scaleValues[4], scaleValues[5]);
-            	gui.updateText(ValueConverter.convertToPSI(scaleValues[1]), 4.8* (scaleValues[3]/1023.0), scaleValues[4], scaleValues[5]);
+            	lastValues[0][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[1];
+            	lastValues[1][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[3];
+            	lastValues[2][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[4];
+            	lastValues[3][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[5];
+
+            	
+            	
+            	averageIndex++;
+            	if(averageIndex == Integer.MAX_VALUE)
+            		averageIndex = 0;
+            	
+            	int pressure = IntStream.of(lastValues[0]).sum() / NUMBER_OF_AVERAGES;
+            	int leftTemp = IntStream.of(lastValues[1]).sum() / NUMBER_OF_AVERAGES;
+            	int centerTemp = IntStream.of(lastValues[2]).sum() / NUMBER_OF_AVERAGES;
+            	int rightTemp = IntStream.of(lastValues[3]).sum() / NUMBER_OF_AVERAGES;
+            	
+//
+//            	
+//            	gui.updateTire(gui.getFrontLeft(), dataFromADC[3], dataFromADC[4], dataFromADC[5]);
+//            	gui.updateText(dataFromADC[1], dataFromADC[3], dataFromADC[4], dataFromADC[5]);
+            	gui.updateTire(	gui.getFrontLeft(), leftTemp, centerTemp, rightTemp);
+            	gui.updateText(ValueConverter.convertToPSI(pressure), ValueConverter.ADCToVoltage(leftTemp), ValueConverter.ADCToVoltage(centerTemp), ValueConverter.ADCToVoltage(rightTemp));
+            	
             	gui.updateFrame();
             }
         }
