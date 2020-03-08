@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 import com.fazecast.jSerialComm.*;
 
-public class TemperatureGUI {
+public class TemperatureGUI implements Constants{
 	
 	
 	/**
@@ -17,7 +17,6 @@ public class TemperatureGUI {
 	 */
 	public static void main(String[] args) 
 	{
-        final int NUMBER_OF_AVERAGES = 50;
         
         SerialPort port = getPortFromSystemIn();
         if (port == null) {
