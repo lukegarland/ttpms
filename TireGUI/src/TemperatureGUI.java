@@ -26,7 +26,7 @@ public class TemperatureGUI {
         gui.initializeUI();
         String input;
         String [] splitData;
-        double [] scaleValues = new double[6];
+        int [] scaleValues = new int[6];
         while(data.hasNextLine()) 
         {
         	input = data.nextLine();
@@ -42,7 +42,7 @@ public class TemperatureGUI {
             		}
             	}
             	gui.updateTire(gui.getFrontLeft(), scaleValues[3], scaleValues[4], scaleValues[5]);
-            	gui.updateText(scaleValues[1], scaleValues[3], scaleValues[4], scaleValues[5]);
+            	gui.updateText(ValueConverter.convertToPSI(scaleValues[1]), 4.8* (scaleValues[3]/1023.0), scaleValues[4], scaleValues[5]);
             	gui.updateFrame();
             }
         }

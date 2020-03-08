@@ -14,14 +14,15 @@ public class ValueConverter {
 	 * @param ADCValue
 	 * @return pressure value in kPa
 	 */
-	public static double convertTokPa(int ADCValue)
+	public static double convertToPSI(int ADCValue)
 	{
 		final double a = 0.01067;
 		final double b = -0.32667;
+		final double kPaToPSIConversion = 6.89475729;
 		
 		double voltage = ADCToVoltage(ADCValue);
 		
-		return (voltage / SYSTEM_VOLTAGE - b) / a ;
+		return ((voltage / SYSTEM_VOLTAGE - b) / a) / kPaToPSIConversion;
 	}
 	
 	
