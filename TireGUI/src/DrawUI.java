@@ -20,7 +20,7 @@ public class DrawUI {
 		frame = new JFrame("Temperature GUI");
 		panel = new JPanel();
 		bottomText = new JLabel("Pressure: 1 PSI, L. Temp: 0 C, C. Temp: 0 C, R. Temp: 0 C");
-		bottomText.setFont(new Font("Arial", Font.PLAIN, 14));
+		bottomText.setFont(new Font("Arial", Font.PLAIN, 12));
 		
 		frontLeft = new Tire();
 		GradientPaint fill = new GradientPaint(0,0,Color.BLACK,100, 0,Color.BLACK);
@@ -74,6 +74,7 @@ public class DrawUI {
 		/* Define the MAXIMUM saturation of RED and GREEN shades
 		 * Range (0-255)
 		 */
+		scale = scale/1023.0;
 		final int RED_MAX = 255;
 		final int BLUE_MAX = 255;
 		final double MAX = 0.5;

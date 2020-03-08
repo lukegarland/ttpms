@@ -35,7 +35,7 @@ public class TemperatureGUI {
             if(splitData.length == 6) {
             	for(int i = 0; i<6; i++) {
             		try {
-            			scaleValues[i] = scaleVoltage(Integer.parseInt(splitData[i]));
+            			scaleValues[i] = Integer.parseInt(splitData[i]);
             		}
             		catch(NumberFormatException nfe) {
             			break;
@@ -111,13 +111,6 @@ public class TemperatureGUI {
 	     }
 	     
 	}
-	/**
-	 * Takes the ADC and scales it to a value between 0 and 1
-	 * @param voltageADC ADC from the analog pins
-	 * @return value between 0 and 1
-	 */
-	private static double scaleVoltage(int voltageADC) {
-		return voltageADC/1023.0;
-	}
+
 }
 
