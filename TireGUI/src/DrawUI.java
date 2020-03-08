@@ -1,33 +1,50 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
-
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class DrawUI {
 	private Tire frontLeft;
-	JFrame frame;
-	JPanel panel;
+	private JFrame frame;
+	private JPanel panel;
+	private JLabel bottomText;
+	/**
+	 * Initializes the frame, tires and panel. The GUI is then
+	 * displayed.
+	 */
 	public void initializeUI() {
 		frame = new JFrame("Temperature GUI");
 		panel = new JPanel();
+		bottomText = new JLabel("Pressure: 1 PSI, L. Temp: 0 C, C. Temp: 0 C, R. Temp: 0 C");
+		bottomText.setFont(new Font("Arial", Font.PLAIN, 12));
+		
 		frontLeft = new Tire();
 		GradientPaint fill = new GradientPaint(0,0,Color.BLACK,100, 0,Color.BLACK);
 		frontLeft.setGradient1(fill);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(panel);
+        frame.getContentPane().add(bottomText , BorderLayout.SOUTH);
         frame.getContentPane().add(frontLeft, BorderLayout.CENTER);
         frame.pack();
         frame.setSize(500, 500);
         frame.setVisible(true);
 	}
-	public void updateTire(Tire t, double outerTempScale, double centerTempScale, double innerTempScale) {
+	/**
+	 * Updates the tire gradients based upon the new temperature values.
+	 * @param t Tire to be updated
+	 * @param leftTempScale 
+	 * @param centerTempScale
+	 * @param rightTempScale
+	 */
+	public void updateTire(Tire t, double leftTempScale, double centerTempScale, double rightTempScale) {
 		Color colourOne, colourTwo, colourThree;
-		colourOne = calculateColor(outerTempScale);
+		colourOne = calculateColor(leftTempScale);
 		colourTwo = calculateColor(centerTempScale);
-		colourThree = calculateColor(innerTempScale);
+		colourThree = calculateColor(rightTempScale);
 		
 		GradientPaint fill = new GradientPaint(0,0,colourOne,175, 0,colourTwo);
 		t.setGradient1(fill);
@@ -35,16 +52,29 @@ public class DrawUI {
 		fill = new GradientPaint(175,0,colourTwo,350, 0,colourThree);
 		t.setGradient2(fill);
 		
-		panel.revalidate();
-		panel.repaint();
+		
+	}
+	public void updateText(double pressure, double leftTemp, double centerTemp, double rightTemp) { 
+		String text = String.format("Pressure: %.2f PSI, L. Temp: %.2f C, C. Temp: %.2f C, R. Temp: %.2f C", pressure, leftTemp, centerTemp, rightTemp);
+		bottomText.setText("<html><div style='text-align: center;'>" + text + "</div></html>");
+	}
+	public void updateFrame() {
 		frame.invalidate();
 		frame.validate();
 		frame.repaint();
 	}
+	/**
+	 * Returns a color from blue <----> green <----> red.
+	 * The method takes the scale value and assigns a color 
+	 * value based upon the above range.
+	 * @param scale value between 0 and 1
+	 * @return Color scaled to scale
+	 */
 	private Color calculateColor(double scale) {
 		/* Define the MAXIMUM saturation of RED and GREEN shades
 		 * Range (0-255)
 		 */
+		scale = scale/1023.0;
 		final int RED_MAX = 255;
 		final int BLUE_MAX = 255;
 		final double MAX = 0.5;
