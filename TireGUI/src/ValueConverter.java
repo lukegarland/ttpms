@@ -44,13 +44,15 @@ public class ValueConverter implements Constants{
 	
 	public static double convertIRTemperature(int ambientADCValue, int iRADCValue)
 	{
-		
-		//TODO
-		double ambientVoltage = ADCToVoltage(ambientADCValue);
-		double iRvoltage = ADCToVoltage(iRADCValue);
-	
-		
-		return 0.0;
+		final double sensitivityConstant = 0.0000000000015; //1.5 * 10^-12
+		final int amplifierGain = 400;
+		double ambientTemperature = 293; //convertAmbientTemperature(ambientADCValue) + 273; //In Kelvin
+		double iRvoltage = ADCToVoltage(iRADCValue)/amplifierGain;
+		//V = S*(To^4 - Ta^4) Solving for To^4
+		iRvoltage = (iRvoltage/sensitivityConstant) + Math.pow(ambientTemperature, 4);
+		//Now solving for To by itself
+		iRvoltage = (Math.pow(iRvoltage, 0.25));	
+		return iRvoltage-273;
 	}
 	
 	public static double ADCToVoltage(int ADCValue)
