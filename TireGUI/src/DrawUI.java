@@ -21,7 +21,7 @@ public class DrawUI {
 		panel = new JPanel();
 		frontLeft = new Tire();
 		
-		bottomText = new JLabel("Pressure: 1 PSI, L. Temp: 0 C, C. Temp: 0 C, R. Temp: 0 C");
+		bottomText = new JLabel("Pressure: 0 PSI, L. Temp: 0 C, C. Temp: 0 C, R. Temp: 0 C");
 		
 		bottomText.setFont(new Font("Arial", Font.PLAIN, 12));
 		
