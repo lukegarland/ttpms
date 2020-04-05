@@ -26,7 +26,7 @@ public class Tire extends JComponent {
 	/**
 	 * Class value for height of the drawing
 	 */
-	public static double height = 300;
+	public static double height = 400;
 	/**
 	 * The paint method for the tire. The method calculates 
 	 * the position it needs to draw the rectangle as well 
