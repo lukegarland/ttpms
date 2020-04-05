@@ -27,6 +27,9 @@ public class TemperatureGUI implements Constants{
         DrawUI gui = new DrawUI();
         gui.initializeUI();
         String input;
+        
+        //String input = "1023 663 400 590 730 950"; FOR EXAMPLE/TESTING
+        
         String [] splitData;
         int [] dataFromADC = new int[6];
         int [][] lastValues = new int [5][NUMBER_OF_AVERAGES];
@@ -38,13 +41,14 @@ public class TemperatureGUI implements Constants{
 
 
         int averageIndex = 0;
-        while(data.hasNextLine()) 
+        while((data.hasNextLine()) )
+        // while(true) UNCOMMENT FOR EXAMPLE/TESTING
         {
-        	input = data.nextLine();
+        	input = data.nextLine(); // COMMENT OUT FOR EXAMPLE/TESTING
             System.out.println(input);
             splitData = input.split("\\s+");
-            
-            if(splitData.length == 6) 
+            		    
+            if(splitData.length == 6) // Ignore incomplete/corrupt data packet
             {
             	for(int i = 0; i<6; i++) 
             	{
@@ -57,6 +61,7 @@ public class TemperatureGUI implements Constants{
             		}
             	}
             	
+            	// Store into temp array
             	lastValues[0][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[1];
             	lastValues[1][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[2];
             	lastValues[2][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[3];
@@ -64,17 +69,19 @@ public class TemperatureGUI implements Constants{
             	lastValues[4][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[5];         	
             	
             	averageIndex++;
-            	if(averageIndex == Integer.MAX_VALUE)
+            	if(averageIndex == Integer.MAX_VALUE) // Prevent roll over
             		averageIndex = 0;
             	
+            	// Average values
             	int pressure = IntStream.of(lastValues[0]).sum() / NUMBER_OF_AVERAGES;
             	int ambientTemp = IntStream.of(lastValues[1]).sum() / NUMBER_OF_AVERAGES;
             	int leftTemp = IntStream.of(lastValues[2]).sum() / NUMBER_OF_AVERAGES;
             	int centerTemp = IntStream.of(lastValues[3]).sum() / NUMBER_OF_AVERAGES;
             	int rightTemp = IntStream.of(lastValues[4]).sum() / NUMBER_OF_AVERAGES;
 
+            	// Update visualization and display data to GUI / JFrame 
             	gui.updateTire(gui.getFrontLeft(), leftTemp, centerTemp, rightTemp);
-            	gui.updateText(ValueConverter.convertToPSI(pressure), ValueConverter.convertIRTemperature(ambientTemp, 5), ValueConverter.convertIRTemperature(ambientTemp, centerTemp), ValueConverter.convertIRTemperature(ambientTemp, rightTemp));
+            	gui.updateText(ValueConverter.convertToPSI(pressure), ValueConverter.convertIRTemperature(ambientTemp, leftTemp), ValueConverter.convertIRTemperature(ambientTemp, centerTemp), ValueConverter.convertIRTemperature(ambientTemp, rightTemp));
             	
             	gui.updateFrame();
             }

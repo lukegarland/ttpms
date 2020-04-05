@@ -21,7 +21,7 @@ public class DrawUI {
 		panel = new JPanel();
 		frontLeft = new Tire();
 		
-		bottomText = new JLabel("Pressure: 1 PSI, L. Temp: 0 C, C. Temp: 0 C, R. Temp: 0 C");
+		bottomText = new JLabel("");
 		
 		bottomText.setFont(new Font("Arial", Font.PLAIN, 12));
 		
@@ -60,8 +60,11 @@ public class DrawUI {
 	
 	public void updateText(double pressure, double leftTemp, double centerTemp, double rightTemp)
 	{ 
-		String text = String.format("Pressure: %.2f PSI, L. Temp: %.2f C, C. Temp: %.2f C, R. Temp: %.2f C", pressure, leftTemp, centerTemp, rightTemp);
-		bottomText.setText("<html><div style='text-align: right;'>" + text + "</div></html>");
+		String text = String.format("Pressure: %.2f PSI<br/><br/>"
+				+ "Inner Temp: %.2f C<br/>"
+				+ " Middle Temp: %.2f C<br/>"
+				+ "Outer Temp: %.2f C<br/>", pressure, leftTemp, centerTemp, rightTemp);
+		bottomText.setText("<html><div style='text-align: left;'>" + text + "</div></html>");
 	}
 	
 	public void updateFrame() 
