@@ -22,6 +22,7 @@ public class DrawUI {
 		frontLeft = new Tire();
 		
 		bottomText = new JLabel("");
+
 		
 		bottomText.setFont(new Font("Arial", Font.PLAIN, 12));
 		
