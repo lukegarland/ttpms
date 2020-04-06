@@ -17,7 +17,6 @@ public class TemperatureGUI implements Constants{
 	 */
 	public static void main(String[] args) 
 	{
-        
         SerialPort port = getPortFromSystemIn();
         if (port == null) {
         	System.out.println("Invalid port. Please restart the program.");
@@ -28,25 +27,28 @@ public class TemperatureGUI implements Constants{
         DrawUI gui = new DrawUI();
         gui.initializeUI();
         String input;
+        
+        //String input = "1023 663 400 590 730 950"; FOR EXAMPLE/TESTING
+        
         String [] splitData;
         int [] dataFromADC = new int[6];
-        int [][] lastValues = new int [4][NUMBER_OF_AVERAGES];
+        int [][] lastValues = new int [5][NUMBER_OF_AVERAGES];
         Arrays.fill(lastValues[0], 0);
         Arrays.fill(lastValues[1], 0);
         Arrays.fill(lastValues[2], 0);
         Arrays.fill(lastValues[3], 0);
+        Arrays.fill(lastValues[4], 0);
 
 
         int averageIndex = 0;
-        while(data.hasNextLine()) 
+        while((data.hasNextLine()) )
+        // while(true) UNCOMMENT FOR EXAMPLE/TESTING
         {
-        	input = data.nextLine();
+        	input = data.nextLine(); // COMMENT OUT FOR EXAMPLE/TESTING
             System.out.println(input);
             splitData = input.split("\\s+");
-            
-            
-            
-            if(splitData.length == 6) 
+            		    
+            if(splitData.length == 6) // Ignore incomplete/corrupt data packet
             {
             	for(int i = 0; i<6; i++) 
             	{
@@ -58,34 +60,34 @@ public class TemperatureGUI implements Constants{
             			break;
             		}
             	}
-            	lastValues[0][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[1];
-            	lastValues[1][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[3];
-            	lastValues[2][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[4];
-            	lastValues[3][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[5];
-
             	
+            	// Store into temp array
+            	lastValues[0][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[1];
+            	lastValues[1][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[2];
+            	lastValues[2][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[3];
+            	lastValues[3][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[4];
+            	lastValues[4][averageIndex % NUMBER_OF_AVERAGES] = dataFromADC[5];         	
             	
             	averageIndex++;
-            	if(averageIndex == Integer.MAX_VALUE)
+            	if(averageIndex == Integer.MAX_VALUE) // Prevent roll over
             		averageIndex = 0;
             	
+            	// Average values
             	int pressure = IntStream.of(lastValues[0]).sum() / NUMBER_OF_AVERAGES;
-            	int leftTemp = IntStream.of(lastValues[1]).sum() / NUMBER_OF_AVERAGES;
-            	int centerTemp = IntStream.of(lastValues[2]).sum() / NUMBER_OF_AVERAGES;
-            	int rightTemp = IntStream.of(lastValues[3]).sum() / NUMBER_OF_AVERAGES;
-            	
-//
-//            	
-//            	gui.updateTire(gui.getFrontLeft(), dataFromADC[3], dataFromADC[4], dataFromADC[5]);
-//            	gui.updateText(dataFromADC[1], dataFromADC[3], dataFromADC[4], dataFromADC[5]);
-            	gui.updateTire(	gui.getFrontLeft(), leftTemp, centerTemp, rightTemp);
-            	gui.updateText(ValueConverter.convertToPSI(pressure), ValueConverter.ADCToVoltage(leftTemp), ValueConverter.ADCToVoltage(centerTemp), ValueConverter.ADCToVoltage(rightTemp));
+            	int ambientTemp = IntStream.of(lastValues[1]).sum() / NUMBER_OF_AVERAGES;
+            	int leftTemp = IntStream.of(lastValues[2]).sum() / NUMBER_OF_AVERAGES;
+            	int centerTemp = IntStream.of(lastValues[3]).sum() / NUMBER_OF_AVERAGES;
+            	int rightTemp = IntStream.of(lastValues[4]).sum() / NUMBER_OF_AVERAGES;
+
+            	// Update visualization and display data to GUI / JFrame 
+            	gui.updateTire(gui.getFrontLeft(), leftTemp, centerTemp, rightTemp);
+            	gui.updateText(ValueConverter.convertToPSI(pressure), ValueConverter.convertIRTemperature(ambientTemp, leftTemp), ValueConverter.convertIRTemperature(ambientTemp, centerTemp), ValueConverter.convertIRTemperature(ambientTemp, rightTemp));
             	
             	gui.updateFrame();
             }
         }
-        
         data.close();
+        port.closePort();
 	}
 	/**
 	 * Asks the user to select a port from the list of available ports
@@ -96,11 +98,12 @@ public class TemperatureGUI implements Constants{
 
 	     System.out.println("Select a port:");
 
-	     printPorts();
+	     int numOfPorts = printPorts();
+	     int chosenPort = 1;
+	     
+	     if(numOfPorts > 1) {
 	     
 	     Scanner s = new Scanner(System.in);
-	     
-	     int chosenPort = 0;
 	     
 	     while(true)
 	     {    
@@ -116,10 +119,10 @@ public class TemperatureGUI implements Constants{
 	     }
 	     
 	     s.close();
+	     }
 	     
 	     // open and configure the port
 	     SerialPort port = SerialPort.getCommPorts()[chosenPort - 1];
-	     
 	     
 	     if(port.openPort())
 	     {
@@ -138,7 +141,7 @@ public class TemperatureGUI implements Constants{
 	/**
 	 * Prints a list of the available ports that can be read serially
 	 */
-	private static void printPorts()
+	private static int printPorts()
 	{
 		 SerialPort ports[] = SerialPort.getCommPorts();
 		 
@@ -147,8 +150,7 @@ public class TemperatureGUI implements Constants{
 	     {
 	                System.out.println(i++ + ":\t" + port.getDescriptivePortName());
 	     }
-	     
+	     return --i;
 	}
-
 }
 
